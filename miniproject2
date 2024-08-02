@@ -1,0 +1,62 @@
+# Function to remove common characters from two lists
+def remove_match_char(list1, list2):
+    common_chars = set(list1) & set(list2)  # Find common characters
+
+    if not common_chars:
+        # If no common characters, return lists concatenated with "*"
+        return [list1 + ["*"] + list2, False]
+
+    # Remove common characters from both lists
+    for char in common_chars:
+        while char in list1:
+            list1.remove(char)
+        while char in list2:
+            list2.remove(char)
+
+    # Concatenate lists with "*" as a separator
+    list3 = list1 + ["*"] + list2
+
+    # Return concatenated list and True flag
+    return [list3, True]
+
+# Main driver code
+if __name__ == "__main__":
+    # Take first name input and process
+    p1 = input("Player 1 name: ").lower().replace(" ", "")
+    p1_list = list(p1)
+
+    # Take second name input and process
+    p2 = input("Player 2 name: ").lower().replace(" ", "")
+    p2_list = list(p2)
+
+    proceed = True
+
+    # Process names until no common characters remain
+    while proceed:
+        ret_list = remove_match_char(p1_list, p2_list)
+        con_list = ret_list[0]
+        proceed = ret_list[1]
+
+        # Find the index of "*"
+        star_index = con_list.index("*")
+
+        # Update lists based on position of "*"
+        p1_list = con_list[:star_index]
+        p2_list = con_list[star_index + 1:]
+
+    # Count total remaining characters
+    count = len(p1_list) + len(p2_list)
+
+    # FLAMES acronym list
+    result = ["Friends", "Love", "Affection", "Marriage", "Enemy", "Siblings"]
+
+    # Determine relationship status based on count
+    while len(result) > 1:
+        split_index = (count % len(result) - 1)
+        if split_index >= 0:
+            result = result[split_index + 1:] + result[:split_index]
+        else:
+            result = result[:len(result) - 1]
+
+    # Print final result
+    print("Relationship status:", result[0])
